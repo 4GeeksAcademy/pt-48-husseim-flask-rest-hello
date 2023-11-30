@@ -45,35 +45,43 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-
+todos = [
+    {
+        "done": True,
+        "label": "Sample Todo 1"
+    },
+    {
+        "done": True,
+        "label": "Sample Todo 2"
+    }
+]
 
 
 @app.route('/todo', methods=['GET'])
 def get_todo():
 
-    response_body = {
-        "msg": "Funciona GET"
-    }
+    return jsonify(todos), 200
 
-    return jsonify(response_body), 200
 
 @app.route('/todo', methods=['POST'])
 def add_todo():
 
-    response_body = {
-        "msg": "Funciona POST"
-    }
+    request_body = request.json
+    todos.append(request_body)
+    print("Incoming request with the following body", request_body)
 
-    return jsonify(response_body), 200
+    return jsonify(todos), 200
 
-@app.route('/todo', methods=['DELETE'])
-def delete_todo():
 
-    response_body = {
-        "msg": "Funciona DELETE"
-    }
+@app.route('/todo/<int:position>', methods=['DELETE'])
+def delete_todo(position):
 
-    return jsonify(response_body), 200
+    del todos[position]
+    print("This is the position to delete: ",position)
+
+    return jsonify(todos), 200
+
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
